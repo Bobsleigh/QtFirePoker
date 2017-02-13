@@ -4,11 +4,13 @@
 #include <QVector>
 #include <QString>
 
+
 class PokerTextFile
 {
     public:
     PokerTextFile();
     void load(QString fileName, QString activePlayer);
+    int readSingleHand(std::ifstream* txtFile, QString activePlayer, bool& stillReading);
 
     private:
     QVector<int> m_hands;

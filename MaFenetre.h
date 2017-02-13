@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
+#include "PokerTextFile.h"
 
 
 class MaFenetre : public QWidget
@@ -22,6 +23,9 @@ class MaFenetre : public QWidget
 
     private:
     QPushButton *m_boutonDialogue;
+    QString m_fileName;
+    PokerTextFile pokerTextFile;
+
 };
 
 #endif

@@ -4,8 +4,12 @@ SOURCES += \
     main.cpp \
     MaFenetre.cpp \
     testgit.cpp \
-    PokerTextFile.cpp
+    PokerTextFile.cpp \
+    Hand.cpp \
+    Card.cpp
 
 HEADERS += \
     MaFenetre.h \
-    PokerTextFile.h
+    PokerTextFile.h \
+    Hand.h \
+    Card.h
