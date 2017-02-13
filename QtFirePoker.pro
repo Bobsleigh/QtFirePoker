@@ -3,7 +3,9 @@ QT += widgets
 SOURCES += \
     main.cpp \
     MaFenetre.cpp \
-    testgit.cpp
+    testgit.cpp \
+    PokerTextFile.cpp
 
 HEADERS += \
-    MaFenetre.h
+    MaFenetre.h \
+    PokerTextFile.h

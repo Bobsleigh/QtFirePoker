@@ -1,6 +1,7 @@
 // MaFenetre.cpp
 
 #include "MaFenetre.h"
+#include "PokerTextFile.h"
 
 MaFenetre::MaFenetre() : QWidget()
 {
