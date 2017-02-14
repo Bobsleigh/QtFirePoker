@@ -1,21 +1,26 @@
 #ifndef POKERTEXTFILE_H
 #define POKERTEXTFILE_H
 
-#include <QVector>
-#include <QString>
+#include "Hand.h"
+#include <vector>
 
 
 class PokerTextFile
 {
     public:
     PokerTextFile();
-    void load(QString fileName, QString activePlayer);
-    int readSingleHand(std::ifstream* txtFile, QString activePlayer, bool& stillReading);
+    void load(std::string fileName, std::string activePlayer);
+    Hand readSingleHand(std::ifstream* txtFile, std::string activePlayer, bool& stillReading);
+
+    void readHandStartingLine(std::string textLine);
+    void readHandSeatLine(std::string textLine, std::string activePlayer);
+    void readBlindLine(std::string textLine, std::string activePlayer);
+    void readHoleCardsLine(std::string textLine, std::string activePlayer);
+    void readBetLine(std::string textLine, std::string activePlayer);
 
     private:
-    QVector<int> m_hands;
-    QString m_name;
-
+    std::vector<Hand> m_hands;
+    std::string m_name;
 };
 
 #endif // POKERTEXTFILE_H

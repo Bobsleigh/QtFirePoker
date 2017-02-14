@@ -2,6 +2,9 @@
 
 #include "MaFenetre.h"
 #include "PokerTextFile.h"
+#include <string>
+#include <QDebug>
+#include <QException>
 
 MaFenetre::MaFenetre() : QWidget()
 {
@@ -16,6 +19,14 @@ MaFenetre::MaFenetre() : QWidget()
 
 void MaFenetre::ouvrirDialogue()
 {
-    m_fileName = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Texte (*.txt)");
-    pokerTextFile.load(m_fileName, "Bobsleigh");
+    //m_fileName = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "Texte (*.txt)");
+    try
+    {
+        qDebug() << std::stoul("salut90");
+    }
+    catch(QException const& e)
+    {
+        qDebug() << e;
+    }
+    //pokerTextFile.load(m_fileName.toStdString(), "Bobsleigh");
 }
