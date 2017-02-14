@@ -13,13 +13,34 @@ class Hand
         void setGain(int gain);
         void setLoss(int loss);
         void setHoleCards(Card firstCard, Card secondCard);
+        void setHandNumber(long long handNumber);
+        void setTournamentNumber(long long tournamentNumber);
+        void setSmallBlind(int smallBlind);
+        void setBigBlind(int bigBlind);
+        void setYear(int year);
+        void setMonth(int month);
+        void setDay(int day);
         int loss() const;
         int gain() const;
+        long long handNumber() const;
+        long long tournamentNumber() const;
+        int smallBlind() const;
+        int bigBlind() const;
+        int year() const;
+        int month() const;
+        int day() const;
+        Card firstHoleCard() const;
+        Card secondHoleCard() const;
 
     private:
-        long m_handNumber;
-        long m_tournamentNumber;
-        //Card m_holeCards[2];
+        long long m_handNumber;
+        long long m_tournamentNumber;
+        int m_smallBlind;
+        int m_bigBlind;
+        int m_year;
+        int m_month;
+        int m_day;
+        Card m_holeCards[2];
         int m_level;
         int m_gain;
         int m_loss;

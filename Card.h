@@ -8,10 +8,12 @@ class Card
     public:
     Card();
     Card(int value, std::string color);
+    Card(std::string value, std::string color);
     void setValue(int value);
     int value() const;
     std::string color() const;
     int cardLetterToNumber(std::string stringNumber);
+    int cardLetterToNumber(char stringNumber);
     int cardLetterToNumber(int number);
 
     private:
