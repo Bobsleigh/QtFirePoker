@@ -11,6 +11,10 @@ Card::Card(int value, std::string color) : m_value(value), m_color(color)
 
 }
 
+Card::Card(std::string value, std::string color) : m_value(cardLetterToNumber(value)), m_color(color)
+{
+
+}
 
 
 int Card::cardLetterToNumber(std::string stringNumber)
