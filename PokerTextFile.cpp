@@ -262,8 +262,6 @@ int PokerTextFile::readBetLine(std::string textLine, std::string activePlayer)
     {
         return 0;
     }
-
-
 }
 
 bool PokerTextFile::seekNextHand(std::ifstream* txtFile)
@@ -274,7 +272,7 @@ bool PokerTextFile::seekNextHand(std::ifstream* txtFile)
     {
         int currentPos = txtFile->tellg();
         getline(*txtFile, line);
-        bool test = txtFile->eof();
+
         if (line.find("PokerStars") != line.npos)
         {
             txtFile->seekg(currentPos);
