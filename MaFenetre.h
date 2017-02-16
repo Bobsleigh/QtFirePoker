@@ -13,6 +13,7 @@
 #include "Player.h"
 
 
+
 class MaFenetre : public QWidget
 {
     Q_OBJECT

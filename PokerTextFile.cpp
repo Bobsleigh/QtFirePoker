@@ -5,6 +5,7 @@
 #include "MaFenetre.h"
 #include <QDebug>
 #include <QString>
+#include <istream>
 
 
 
@@ -13,8 +14,13 @@ PokerTextFile::PokerTextFile() : m_name("")
 {
 }
 
+std::vector<Hand> PokerTextFile::getFileHands()
+{
+    return m_hands;
+}
 
-void PokerTextFile::load(std::string fileName, Player* activePlayer)
+
+bool PokerTextFile::load(std::string fileName, Player* activePlayer)
 {
     m_name = fileName;
 
@@ -32,6 +38,8 @@ void PokerTextFile::load(std::string fileName, Player* activePlayer)
             }
         }
     }
+
+    return txtFile.is_open();
 }
 
 Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
@@ -40,7 +48,8 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
     Hand currentHand;
 
     std::string textLine;
-    int filePosition(0);
+    std::istream::streampos filePosition(0);
+
 
     //STEP 0 - READ HEADER
     getline(*txtFile, textLine);
@@ -61,7 +70,7 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
         }
     }
 
-    //STEP 2 - READ BLINDS
+    //STEP 2 - READ BLINDS AND ANTES
     while(true)
     {
         getline(*txtFile, textLine);
@@ -157,7 +166,7 @@ int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, 
 {
     std::string stack;
 
-    if (textLine.find("posts small") != textLine.npos)
+    if (textLine.find("posts small") != textLine.npos || textLine.find("posts the ante") != textLine.npos)
     {
         return -1; //Special value to indicate we are no longer in seat lines
     }
@@ -178,12 +187,23 @@ bool PokerTextFile::readBlindLine(std::string textLine, Player* activePlayer, Ha
 {
     std::string blind;
 
+
+
     if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         size_t startPos = textLine.find_first_of(":");
         size_t endPos = startPos;
         blind = getNextNumber(textLine, &startPos, &endPos, " ");
-        qDebug() << "blind:" << QString::fromStdString(blind);
+
+        if (textLine.find("posts the ante") != textLine.npos)
+        {
+             qDebug() << "Ante:" << QString::fromStdString(blind);
+        }
+        else
+        {
+            qDebug() << "blind:" << QString::fromStdString(blind);
+        }
+
         currentHand->setLoss(currentHand->loss() + std::stoi(blind));
     }
     else if (textLine.find("*** HOLE CARDS ***") != textLine.npos)

@@ -10,8 +10,9 @@ class PokerTextFile
 {
     public:
     PokerTextFile();
-    void load(std::string fileName, Player* activePlayer);
+    bool load(std::string fileName, Player* activePlayer);
     Hand readSingleHand(std::ifstream* txtFile, Player* activePlayer);
+    std::vector<Hand> getFileHands();
 
     void readHandStartingLine(std::string textLine, Hand* currentHand);
     int readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand);

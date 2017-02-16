@@ -1,5 +1,7 @@
 QT += widgets
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
+
 
 SOURCES += \
     main.cpp \
@@ -10,7 +12,7 @@ SOURCES += \
     Card.cpp \
     Player.cpp \
     MainWindow.cpp \
-    PokerSessionPlot.cpp
+    qcustomplot.cpp
 
 HEADERS += \
     MaFenetre.h \
@@ -19,6 +21,4 @@ HEADERS += \
     Card.h \
     Player.h \
     MainWindow.h \
-    PokerSessionPlot.h
-
-CONFIG += qwt
+    qcustomplot.h
