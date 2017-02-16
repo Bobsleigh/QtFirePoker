@@ -22,7 +22,6 @@ class PokerTextFile
     std::string getNextNumber(std::string textLine, size_t* startPos, size_t* endPos, std::string cutOffChar);
     bool seekNextHand(std::ifstream* txtFile);
 
-
     private:
     std::vector<Hand> m_hands;
     std::string m_name;

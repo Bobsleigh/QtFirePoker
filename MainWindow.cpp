@@ -25,7 +25,7 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     QWidget* tab1 = new QWidget();
     QWidget* tab2 = new QWidget();
 
-    //Tab1
+    //Tab1 (Stats)
     m_sessionPlot = new QCustomPlot();
     //sessionPlot->setMinimumSize(QSize(300,300));
     // generate some data:
@@ -59,7 +59,7 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     tabWidget->addTab(tab1, "Stats");
 
 
-    //Tab2
+    //Tab2 (In Construction)
     QPushButton* testButton = new QPushButton("In construction");
     QHBoxLayout* layoutTab2 = new QHBoxLayout;
     layoutTab2->addWidget(testButton);
