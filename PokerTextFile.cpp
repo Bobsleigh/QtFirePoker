@@ -14,7 +14,7 @@ PokerTextFile::PokerTextFile() : m_name("")
 }
 
 
-void PokerTextFile::load(std::string fileName, std::string activePlayer)
+void PokerTextFile::load(std::string fileName, Player* activePlayer)
 {
     m_name = fileName;
 
@@ -34,7 +34,7 @@ void PokerTextFile::load(std::string fileName, std::string activePlayer)
     }
 }
 
-Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, std::string activePlayer)
+Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
 {
     int playerStack = -1;
     Hand currentHand;
@@ -153,7 +153,7 @@ void PokerTextFile::readHandStartingLine(std::string textLine, Hand* currentHand
     qDebug() << currentHand->day();
 }
 
-int PokerTextFile::readHandSeatLine(std::string textLine, std::string activePlayer, Hand* currentHand)
+int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand)
 {
     std::string stack;
 
@@ -162,7 +162,7 @@ int PokerTextFile::readHandSeatLine(std::string textLine, std::string activePlay
         return -1; //Special value to indicate we are no longer in seat lines
     }
 
-    if (textLine.find(activePlayer) != textLine.npos)
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         size_t startPos = textLine.find_first_of("(");
         size_t endPos = startPos;
@@ -174,11 +174,11 @@ int PokerTextFile::readHandSeatLine(std::string textLine, std::string activePlay
     return 0;
 }
 
-bool PokerTextFile::readBlindLine(std::string textLine, std::string activePlayer, Hand* currentHand)
+bool PokerTextFile::readBlindLine(std::string textLine, Player* activePlayer, Hand* currentHand)
 {
     std::string blind;
 
-    if (textLine.find(activePlayer) != textLine.npos)
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         size_t startPos = textLine.find_first_of(":");
         size_t endPos = startPos;
@@ -204,14 +204,14 @@ void PokerTextFile::readHoleCardsLine(std::string textLine, Hand* currentHand)
 
 }
 
-int PokerTextFile::readBetLine(std::string textLine, std::string activePlayer)
+int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer)
 {
     size_t startPos = textLine.find_first_of(":");
     size_t endPos = startPos;
 
     //TODO: Account for the case where a player name has one of the keywords in it
 
-    if (textLine.find(activePlayer) != textLine.npos)
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         if (textLine.find("bets") != textLine.npos)
         {

@@ -1,7 +1,5 @@
-// MaFenetre.h
-
-#ifndef DEF_MAFENETRE
-#define DEF_MAFENETRE
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QApplication>
 #include <QWidget>
@@ -12,26 +10,22 @@
 #include "PokerTextFile.h"
 #include "Player.h"
 
-
-class MaFenetre : public QWidget
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
     public:
-    MaFenetre();
-    ~MaFenetre();
-
+    MainWindow();
+    ~MainWindow();
 
     public slots:
-    void ouvrirDialogue();
+    void loadButtonClicked();
 
     private:
-
-    QPushButton *m_boutonDialogue;
+    QPushButton *m_loadButton;
     QString m_fileName;
     PokerTextFile pokerTextFile;
     Player* m_activePlayer;
-
 };
 
-#endif
+#endif // MAINWINDOW_H
