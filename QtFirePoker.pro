@@ -1,6 +1,7 @@
 QT += widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 
 SOURCES += \
     main.cpp \
@@ -9,6 +10,8 @@ SOURCES += \
     PokerTextFile.cpp \
     Hand.cpp \
     Card.cpp \
+    Player.cpp \
+    MainWindow.cpp \
     qcustomplot.cpp
 
 HEADERS += \
@@ -16,4 +19,6 @@ HEADERS += \
     PokerTextFile.h \
     Hand.h \
     Card.h \
+    Player.h \
+    MainWindow.h \
     qcustomplot.h

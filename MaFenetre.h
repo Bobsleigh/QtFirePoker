@@ -5,10 +5,13 @@
 
 #include <QApplication>
 #include <QWidget>
+#include <QtWidgets>
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
 #include "PokerTextFile.h"
+#include "Player.h"
+
 
 
 class MaFenetre : public QWidget
@@ -17,14 +20,18 @@ class MaFenetre : public QWidget
 
     public:
     MaFenetre();
+    ~MaFenetre();
+
 
     public slots:
     void ouvrirDialogue();
 
     private:
+
     QPushButton *m_boutonDialogue;
     QString m_fileName;
     PokerTextFile pokerTextFile;
+    Player* m_activePlayer;
 
 };
 

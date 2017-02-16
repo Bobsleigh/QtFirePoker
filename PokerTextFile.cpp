@@ -5,6 +5,7 @@
 #include "MaFenetre.h"
 #include <QDebug>
 #include <QString>
+#include <istream>
 
 
 
@@ -13,8 +14,13 @@ PokerTextFile::PokerTextFile() : m_name("")
 {
 }
 
+std::vector<Hand> PokerTextFile::getFileHands()
+{
+    return m_hands;
+}
 
-void PokerTextFile::load(std::string fileName, std::string activePlayer)
+
+bool PokerTextFile::load(std::string fileName, Player* activePlayer)
 {
     m_name = fileName;
 
@@ -32,15 +38,18 @@ void PokerTextFile::load(std::string fileName, std::string activePlayer)
             }
         }
     }
+
+    return txtFile.is_open();
 }
 
-Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, std::string activePlayer)
+Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
 {
     int playerStack = -1;
     Hand currentHand;
 
     std::string textLine;
-    int filePosition(0);
+    std::istream::streampos filePosition(0);
+
 
     //STEP 0 - READ HEADER
     getline(*txtFile, textLine);
@@ -61,7 +70,7 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, std::string activePla
         }
     }
 
-    //STEP 2 - READ BLINDS
+    //STEP 2 - READ BLINDS AND ANTES
     while(true)
     {
         getline(*txtFile, textLine);
@@ -153,16 +162,16 @@ void PokerTextFile::readHandStartingLine(std::string textLine, Hand* currentHand
     qDebug() << currentHand->day();
 }
 
-int PokerTextFile::readHandSeatLine(std::string textLine, std::string activePlayer, Hand* currentHand)
+int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand)
 {
     std::string stack;
 
-    if (textLine.find("posts small") != textLine.npos)
+    if (textLine.find("posts small") != textLine.npos || textLine.find("posts the ante") != textLine.npos)
     {
         return -1; //Special value to indicate we are no longer in seat lines
     }
 
-    if (textLine.find(activePlayer) != textLine.npos)
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         size_t startPos = textLine.find_first_of("(");
         size_t endPos = startPos;
@@ -174,16 +183,27 @@ int PokerTextFile::readHandSeatLine(std::string textLine, std::string activePlay
     return 0;
 }
 
-bool PokerTextFile::readBlindLine(std::string textLine, std::string activePlayer, Hand* currentHand)
+bool PokerTextFile::readBlindLine(std::string textLine, Player* activePlayer, Hand* currentHand)
 {
     std::string blind;
 
-    if (textLine.find(activePlayer) != textLine.npos)
+
+
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         size_t startPos = textLine.find_first_of(":");
         size_t endPos = startPos;
         blind = getNextNumber(textLine, &startPos, &endPos, " ");
-        qDebug() << "blind:" << QString::fromStdString(blind);
+
+        if (textLine.find("posts the ante") != textLine.npos)
+        {
+             qDebug() << "Ante:" << QString::fromStdString(blind);
+        }
+        else
+        {
+            qDebug() << "blind:" << QString::fromStdString(blind);
+        }
+
         currentHand->setLoss(currentHand->loss() + std::stoi(blind));
     }
     else if (textLine.find("*** HOLE CARDS ***") != textLine.npos)
@@ -204,14 +224,14 @@ void PokerTextFile::readHoleCardsLine(std::string textLine, Hand* currentHand)
 
 }
 
-int PokerTextFile::readBetLine(std::string textLine, std::string activePlayer)
+int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer)
 {
     size_t startPos = textLine.find_first_of(":");
     size_t endPos = startPos;
 
     //TODO: Account for the case where a player name has one of the keywords in it
 
-    if (textLine.find(activePlayer) != textLine.npos)
+    if (textLine.find(activePlayer->name()) != textLine.npos)
     {
         if (textLine.find("bets") != textLine.npos)
         {

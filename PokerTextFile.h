@@ -3,23 +3,24 @@
 
 #include "Hand.h"
 #include <vector>
+#include "player.h"
 
 
 class PokerTextFile
 {
     public:
     PokerTextFile();
-    void load(std::string fileName, std::string activePlayer);
-    Hand readSingleHand(std::ifstream* txtFile, std::string activePlayer);
+    bool load(std::string fileName, Player* activePlayer);
+    Hand readSingleHand(std::ifstream* txtFile, Player* activePlayer);
+    std::vector<Hand> getFileHands();
 
     void readHandStartingLine(std::string textLine, Hand* currentHand);
-    int readHandSeatLine(std::string textLine, std::string activePlayer, Hand* currentHand);
-    bool readBlindLine(std::string textLine, std::string activePlayer, Hand* currentHand);
+    int readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand);
+    bool readBlindLine(std::string textLine, Player* activePlayer, Hand* currentHand);
     void readHoleCardsLine(std::string textLine, Hand* currentHand);
-    int readBetLine(std::string textLine, std::string activePlayer);
+    int readBetLine(std::string textLine, Player* activePlayer);
     std::string getNextNumber(std::string textLine, size_t* startPos, size_t* endPos, std::string cutOffChar);
     bool seekNextHand(std::ifstream* txtFile);
-
 
     private:
     std::vector<Hand> m_hands;
