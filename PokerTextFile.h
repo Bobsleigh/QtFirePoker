@@ -21,10 +21,15 @@ class PokerTextFile
     int readBetLine(std::string textLine, Player* activePlayer);
     std::string getNextNumber(std::string textLine, size_t* startPos, size_t* endPos, std::string cutOffChar);
     bool seekNextHand(std::ifstream* txtFile);
+    void setHoleCardsRank(Hand* currentHand);
 
     private:
     std::vector<Hand> m_hands;
     std::string m_name;
+
+    //Array storing card rank info (i.e. ATo, 98s)
+    //The third dimension is 0 = offsuit, 1 = suited
+    int m_nbOfHoleCardsPerRank[13][13][2]; //Note: for clarity, 0 indices are left empty and have no meaning.
 
 
 };

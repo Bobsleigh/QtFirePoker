@@ -8,6 +8,17 @@
 
 PokerTextFile::PokerTextFile() : m_name("")
 {
+    for (int i=0;i<13;i++)
+    {
+        for (int j=0;j<13;j++)
+        {
+            for (int k=0;k<2;k++)
+            {
+                m_nbOfHoleCardsPerRank[i][j][k] = 0;
+            }
+        }
+    }
+
 }
 
 std::vector<Hand> PokerTextFile::getFileHands()
@@ -195,7 +206,15 @@ void PokerTextFile::readHoleCardsLine(std::string textLine, Hand* currentHand)
     size_t startPos = textLine.find_first_of("[");
     std::string cardLine = textLine.substr(startPos+1, 5);
     currentHand->setHoleCards(Card(cardLine.substr(0,1), cardLine.substr(1,1)), Card(cardLine.substr(3,1), cardLine.substr(4,1)));
+    setHoleCardsRank(currentHand);
+}
 
+void PokerTextFile::setHoleCardsRank(Hand* currentHand)
+{
+    if (currentHand->holeCards().firstCard().value() > currentHand->holeCards().secondCard().value())
+    {
+        m_nbOfHoleCardsPerRank[currentHand->holeCards().firstCard().value()][currentHand->holeCards().secondCard().value()][currentHand->holeCards().isSuited()];
+    }
 }
 
 int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer)

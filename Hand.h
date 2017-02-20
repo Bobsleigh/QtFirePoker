@@ -2,6 +2,7 @@
 #define HAND_H
 
 #include "Card.h"
+#include "HoleCards.h"
 
 
 class Hand
@@ -29,8 +30,9 @@ class Hand
         int year() const;
         int month() const;
         int day() const;
-        Card firstHoleCard() const;
-        Card secondHoleCard() const;
+        Card firstHoleCard();
+        Card secondHoleCard();
+        HoleCards holeCards();
 
     private:
         long long m_handNumber;
@@ -40,7 +42,7 @@ class Hand
         int m_year;
         int m_month;
         int m_day;
-        Card m_holeCards[2];
+        HoleCards m_holeCards;
         int m_level;
         int m_gain;
         int m_loss;
