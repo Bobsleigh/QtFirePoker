@@ -1,5 +1,4 @@
 #include <QApplication>
-#include "MaFenetre.h"
 #include "MainWindow.h"
 
 int main(int argc, char *argv[])

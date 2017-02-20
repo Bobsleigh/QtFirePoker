@@ -1,13 +1,13 @@
 #include "MainWindow.h"
 
 
-MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0)
+MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0), m_lbAvgGain(0)
 {
 
     m_fileName = "";
     m_activePlayer = new Player("Bobsleigh", 1500);
 
-    setMinimumSize(QSize(600,400));
+    setMinimumSize(QSize(1000,600));
 
     m_loadButton = new QPushButton("Load PokerStars file", this);
 
@@ -28,19 +28,13 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     //Tab1 (Stats)
     m_sessionPlot = new QCustomPlot();
     //sessionPlot->setMinimumSize(QSize(300,300));
-    // generate some data:
-    QVector<double> x(101), y(101); // initialize with entries 0..100
-    for (int i=0; i<101; ++i)
-    {
-      x[i] = i/50.0 - 1; // x goes from -1 to 1
-      y[i] = x[i]*x[i]; // let's plot a quadratic function
-    }
+
     // create graph and assign data to it:
     m_sessionPlot->addGraph();
-    m_sessionPlot->graph(0)->setData(x, y);
+
     // give the axes some labels:
-    m_sessionPlot->xAxis->setLabel("x");
-    m_sessionPlot->yAxis->setLabel("y");
+    m_sessionPlot->xAxis->setLabel("Hands");
+    m_sessionPlot->yAxis->setLabel("Chips");
     // set axes ranges, so we see all data:
     m_sessionPlot->xAxis->setRange(-1, 1);
     m_sessionPlot->yAxis->setRange(0, 1);
@@ -49,22 +43,26 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     m_lbTournamentNb = new QLabel("Tournament Number: ");
     m_lbNbOfHands = new QLabel("Hands: ");
     m_lbNetGain = new QLabel("Net Gain: ");
+    m_lbAvgGain = new QLabel("Average Gain: ");
 
     QGridLayout* layoutTab1 = new QGridLayout;
-    layoutTab1->addWidget(m_sessionPlot, 0,0,3,2);
+    layoutTab1->addWidget(m_sessionPlot, 0,0,4,2);
     layoutTab1->addWidget(m_lbTournamentNb,0,2);
     layoutTab1->addWidget(m_lbNbOfHands, 1,2);
     layoutTab1->addWidget(m_lbNetGain, 2,2);
+    layoutTab1->addWidget(m_lbAvgGain, 3,2);
+
     tab1->setLayout(layoutTab1);
     tabWidget->addTab(tab1, "Stats");
 
-
     //Tab2 (In Construction)
+    /*
     QPushButton* testButton = new QPushButton("In construction");
     QHBoxLayout* layoutTab2 = new QHBoxLayout;
     layoutTab2->addWidget(testButton);
     tab2->setLayout(layoutTab2);
     tabWidget->addTab(tab2, "In construction");
+    */
 
     QObject::connect(m_loadButton, SIGNAL(clicked()), this, SLOT(loadButtonClicked()));
 
@@ -92,6 +90,7 @@ void MainWindow::loadButtonClicked()
     {
         displaySessionPlot();
         m_sessionPlot->replot();
+
     }
 }
 
@@ -120,4 +119,5 @@ void MainWindow::displaySessionPlot()
     m_lbTournamentNb->setText("Tournament Number: " + QString::number((handsVector.back()).tournamentNumber()));
     m_lbNbOfHands->setText("Hands: " + QString::number(handsVector.size()));
     m_lbNetGain->setText("Net Gain: " + QString::number(y[handsVector.size()]));
+    m_lbAvgGain->setText("Average Gain: "+ QString::number(y[handsVector.size()]/handsVector.size()));
 }

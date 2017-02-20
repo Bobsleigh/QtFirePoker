@@ -2,13 +2,9 @@
 #include "Hand.h"
 #include <fstream>
 #include <QMessageBox>
-#include "MaFenetre.h"
 #include <QDebug>
 #include <QString>
 #include <istream>
-
-
-
 
 PokerTextFile::PokerTextFile() : m_name("")
 {
@@ -23,6 +19,7 @@ std::vector<Hand> PokerTextFile::getFileHands()
 bool PokerTextFile::load(std::string fileName, Player* activePlayer)
 {
     m_name = fileName;
+    m_hands.clear();
 
     std::ifstream txtFile(fileName);
 
@@ -111,9 +108,6 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
         }
     }
 
-    qDebug() << "Loss:" << currentHand.loss();
-    qDebug() << "Gain:" << currentHand.gain();
-
     return currentHand;
 }
 
@@ -153,13 +147,6 @@ void PokerTextFile::readHandStartingLine(std::string textLine, Hand* currentHand
     currentHand->setMonth(std::stoi(month));
     currentHand->setDay(std::stoi(day));
 
-    qDebug() << currentHand->handNumber();
-    qDebug() << currentHand->tournamentNumber();
-    qDebug() << currentHand->smallBlind();
-    qDebug() << currentHand->bigBlind();
-    qDebug() << currentHand->year();
-    qDebug() << currentHand->month();
-    qDebug() << currentHand->day();
 }
 
 int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand)
@@ -176,7 +163,6 @@ int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, 
         size_t startPos = textLine.find_first_of("(");
         size_t endPos = startPos;
         stack = getNextNumber(textLine, &startPos, &endPos, " ");
-        qDebug() << "stack:" << QString::fromStdString(stack);
         return std::stoi(stack);
     }
 
@@ -194,16 +180,6 @@ bool PokerTextFile::readBlindLine(std::string textLine, Player* activePlayer, Ha
         size_t startPos = textLine.find_first_of(":");
         size_t endPos = startPos;
         blind = getNextNumber(textLine, &startPos, &endPos, " ");
-
-        if (textLine.find("posts the ante") != textLine.npos)
-        {
-             qDebug() << "Ante:" << QString::fromStdString(blind);
-        }
-        else
-        {
-            qDebug() << "blind:" << QString::fromStdString(blind);
-        }
-
         currentHand->setLoss(currentHand->loss() + std::stoi(blind));
     }
     else if (textLine.find("*** HOLE CARDS ***") != textLine.npos)
@@ -219,8 +195,6 @@ void PokerTextFile::readHoleCardsLine(std::string textLine, Hand* currentHand)
     size_t startPos = textLine.find_first_of("[");
     std::string cardLine = textLine.substr(startPos+1, 5);
     currentHand->setHoleCards(Card(cardLine.substr(0,1), cardLine.substr(1,1)), Card(cardLine.substr(3,1), cardLine.substr(4,1)));
-    qDebug() << currentHand->firstHoleCard().value() << QString::fromStdString(currentHand->firstHoleCard().color());
-    qDebug() << currentHand->secondHoleCard().value() << QString::fromStdString(currentHand->secondHoleCard().color());
 
 }
 

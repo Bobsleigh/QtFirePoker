@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow
     QLabel* m_lbTournamentNb;
     QLabel* m_lbNbOfHands;
     QLabel* m_lbNetGain;
+    QLabel* m_lbAvgGain;
 
     void displaySessionPlot();
 };
