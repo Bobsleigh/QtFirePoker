@@ -46,6 +46,30 @@ void HoleCards::getCardsRank()
     }
 }
 
+int HoleCards::higherValue()
+{
+    if (m_cards[0].value() > m_cards[1].value())
+    {
+        return m_cards[0].value();
+    }
+    else
+    {
+        return m_cards[1].value();
+    }
+}
+
+int HoleCards::lowerValue()
+{
+    if (m_cards[0].value() < m_cards[1].value())
+    {
+        return m_cards[0].value();
+    }
+    else
+    {
+        return m_cards[1].value();
+    }
+}
+
 bool HoleCards::isSuited()
 {
     if (m_cards[0].color() == m_cards[1].color())

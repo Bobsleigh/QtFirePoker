@@ -1,7 +1,7 @@
 #ifndef HOLECARDS_H
 #define HOLECARDS_H
 
-#import "Card.h"
+#include "Card.h"
 
 
 class HoleCards
@@ -12,6 +12,8 @@ public:
     bool isSuited();
     void setHoleCards(Card firstCard, Card secondCard);
     void getCardsRank();
+    int higherValue();
+    int lowerValue();
     Card firstCard();
     Card secondCard();
 

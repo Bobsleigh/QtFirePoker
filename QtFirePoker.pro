@@ -10,7 +10,8 @@ SOURCES += \
     Player.cpp \
     MainWindow.cpp \
     qcustomplot.cpp \
-    HoleCards.cpp
+    HoleCards.cpp \
+    StatsCounter.cpp
 
 HEADERS += \
     PokerTextFile.h \
@@ -19,4 +20,5 @@ HEADERS += \
     Player.h \
     MainWindow.h \
     qcustomplot.h \
-    HoleCards.h
+    HoleCards.h \
+    StatsCounter.h
