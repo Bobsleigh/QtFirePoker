@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
 
     public slots:
     void loadButtonClicked();
+    void cardRankEntered();
 
     private:
     QPushButton *m_loadButton;
@@ -33,6 +34,10 @@ class MainWindow : public QMainWindow
     QLabel* m_lbNbOfHands;
     QLabel* m_lbNetGain;
     QLabel* m_lbAvgGain;
+    QLineEdit* m_cardRankInput;
+
+    //Card rank stats section
+    QLabel* m_lbWinRate;
 
     void displaySessionPlot();
 };

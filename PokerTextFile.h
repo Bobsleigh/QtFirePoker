@@ -24,6 +24,8 @@ class PokerTextFile
     bool seekNextHand(std::ifstream* txtFile);
     void setHoleCardsRank(Hand* currentHand);
 
+    StatsCounter nbOfHoleCardsPerRank(int firstCardRank, int secondCardRank, int suited);
+
     private:
     std::vector<Hand> m_hands;
     std::string m_name;
@@ -31,7 +33,6 @@ class PokerTextFile
     //Array storing card rank info (i.e. ATo, 98s)
     //The third dimension is 0 = offsuit, 1 = suited
     StatsCounter m_nbOfHoleCardsPerRank[14][14][2]; //Note: for clarity, 0 indices are left empty and have no meaning.
-
 
 };
 

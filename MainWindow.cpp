@@ -1,7 +1,8 @@
 #include "MainWindow.h"
+#include "StatsCounter.h"
 
 
-MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0), m_lbAvgGain(0)
+MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0), m_lbAvgGain(0), m_cardRankInput(0), m_lbWinRate(0)
 {
 
     m_fileName = "";
@@ -58,13 +59,13 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     //Tab2 (In Construction)
 
 
-    QLineEdit* cardRankInput = new QLineEdit();
-    QPushButton* testButton = new QPushButton("In construction");
+    m_cardRankInput = new QLineEdit();
+
     QHBoxLayout* layoutTab2 = new QHBoxLayout;
 
     //Left part
     QGridLayout* layoutRankButtons = new QGridLayout;
-    layoutRankButtons->addWidget(cardRankInput);
+    layoutRankButtons->addWidget(m_cardRankInput);
     QWidget* widgetRankButtons = new QWidget;
     widgetRankButtons->setLayout(layoutRankButtons);
 
@@ -73,8 +74,12 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     widgetRankButtons->setSizePolicy(spLeft);
 
     //Right part
+    m_lbWinRate = new QLabel("WinRateHere");
+    QPushButton* testButton = new QPushButton("In construction");
     QGridLayout* layoutStatsLabels = new QGridLayout;
     layoutStatsLabels->addWidget(testButton);
+    layoutStatsLabels->addWidget(m_lbWinRate);
+
     QWidget* widgetStatsLabels = new QWidget;
     widgetStatsLabels->setLayout(layoutStatsLabels);
 
@@ -98,6 +103,7 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
 
     QObject::connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     QObject::connect(loadAction, SIGNAL(triggered()), this, SLOT(loadButtonClicked()));
+    QObject::connect(m_cardRankInput, SIGNAL(returnPressed()), this, SLOT(cardRankEntered()));
 
 }
 
@@ -144,3 +150,14 @@ void MainWindow::displaySessionPlot()
     m_lbNetGain->setText("Net Gain: " + QString::number(y[handsVector.size()]));
     m_lbAvgGain->setText("Average Gain: "+ QString::number(y[handsVector.size()]/handsVector.size()));
 }
+
+void MainWindow::cardRankEntered()
+{
+    int firstCardRank = Card::cardLetterToNumber(m_cardRankInput->text().left(1).toStdString());
+    int secondCardRank = Card::cardLetterToNumber(m_cardRankInput->text().mid(1,1).toStdString());
+    int suited = Card::cardSuitToNumber(m_cardRankInput->text().right(1).toStdString());
+
+    m_lbWinRate->setText(QString::number(m_pokerTextFile.nbOfHoleCardsPerRank(firstCardRank, secondCardRank, suited).wins()));
+}
+
+

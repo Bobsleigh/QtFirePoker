@@ -13,10 +13,11 @@ class Card
     int value() const;
     std::string valueString();
     std::string color() const;
-    int cardLetterToNumber(std::string stringNumber);
-    int cardLetterToNumber(char stringNumber);
-    int cardLetterToNumber(int number);
-    std::string cardNumberToLetter(int number);
+    static int cardLetterToNumber(std::string stringNumber);
+    static int cardLetterToNumber(char stringNumber);
+    static int cardLetterToNumber(int number);
+    static std::string cardNumberToLetter(int number);
+    static int cardSuitToNumber(std::string stringNumber);
 
     private:
     int m_value;
