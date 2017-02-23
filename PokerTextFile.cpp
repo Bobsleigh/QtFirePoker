@@ -8,6 +8,17 @@
 
 PokerTextFile::PokerTextFile() : m_name("")
 {
+    for (int i=0;i<14;i++)
+    {
+        for (int j=0;j<14;j++)
+        {
+            for (int k=0;k<2;k++)
+            {
+                m_nbOfHoleCardsPerRank[i][j][k].reset();
+            }
+        }
+    }
+
 }
 
 std::vector<Hand> PokerTextFile::getFileHands()
@@ -88,7 +99,7 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
     while(true)
     {
         getline(*txtFile, textLine);
-        int value = readBetLine(textLine, activePlayer);
+        int value = readBetLine(textLine, activePlayer, &currentHand);
 
         if (value == 0)
         {
@@ -195,10 +206,18 @@ void PokerTextFile::readHoleCardsLine(std::string textLine, Hand* currentHand)
     size_t startPos = textLine.find_first_of("[");
     std::string cardLine = textLine.substr(startPos+1, 5);
     currentHand->setHoleCards(Card(cardLine.substr(0,1), cardLine.substr(1,1)), Card(cardLine.substr(3,1), cardLine.substr(4,1)));
-
+    setHoleCardsRank(currentHand);
 }
 
-int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer)
+void PokerTextFile::setHoleCardsRank(Hand* currentHand)
+{
+    if (currentHand->holeCards().firstCard().value() > currentHand->holeCards().secondCard().value())
+    {
+        m_nbOfHoleCardsPerRank[currentHand->holeCards().firstCard().value()][currentHand->holeCards().secondCard().value()][currentHand->holeCards().isSuited()];
+    }
+}
+
+int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer, Hand* currentHand)
 {
     size_t startPos = textLine.find_first_of(":");
     size_t endPos = startPos;
@@ -227,6 +246,7 @@ int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer)
         {
             startPos = textLine.find_first_of(" ");
             endPos = startPos;
+            m_nbOfHoleCardsPerRank[currentHand->holeCards().higherValue()][currentHand->holeCards().lowerValue()][currentHand->holeCards().isSuited()].incrWins(); //Count a win for this card rank
             return std::stoi(getNextNumber(textLine, &startPos, &endPos, " "));
         }
         else if (textLine.find("checks") != textLine.npos)

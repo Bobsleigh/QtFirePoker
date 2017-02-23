@@ -31,8 +31,7 @@ void Hand::setLoss(int loss)
 
 void Hand::setHoleCards(Card firstCard, Card secondCard)
 {
-    m_holeCards[0] = firstCard;
-    m_holeCards[1] = secondCard;
+    m_holeCards.setHoleCards(firstCard, secondCard);
 }
 
 void Hand::setHandNumber(long long handNumber)
@@ -115,14 +114,19 @@ int Hand::gain() const
     return m_gain;
 }
 
-Card Hand::firstHoleCard() const
+Card Hand::firstHoleCard()
 {
-    return m_holeCards[0];
+    return m_holeCards.firstCard();
 }
 
-Card Hand::secondHoleCard() const
+Card Hand::secondHoleCard()
 {
-    return m_holeCards[1];
+    return m_holeCards.secondCard();
+}
+
+HoleCards Hand::holeCards()
+{
+    return m_holeCards;
 }
 
 std::ostream &operator<<(std::ostream &flux, Hand const& hand)

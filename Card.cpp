@@ -38,6 +38,27 @@ int Card::cardLetterToNumber(std::string stringNumber)
     return -1;
 }
 
+std::string Card::cardNumberToLetter(int number)
+{
+    std::string value;
+    if (number == 1) value = "A";
+    else if (number == 2) value =  "2";
+    else if (number == 3) value =  "3";
+    else if (number == 4) value =  "4";
+    else if (number == 5) value =  "5";
+    else if (number == 6) value =  "6";
+    else if (number == 7) value =  "7";
+    else if (number == 8) value =  "8";
+    else if (number == 9) value =  "9";
+    else if (number == 10) value = "T";
+    else if (number == 11) value =  "J";
+    else if (number == 12) value =  "Q";
+    else if (number == 13) value =  "K";
+    else return "";
+
+    return value;
+}
+
 int Card::cardLetterToNumber(int number)
 {
     return number;
@@ -51,6 +72,11 @@ void Card::setValue(int value)
 int Card::value() const
 {
     return m_value;
+}
+
+std::string Card::valueString()
+{
+    return cardNumberToLetter(m_value);
 }
 
 std::string Card::color() const

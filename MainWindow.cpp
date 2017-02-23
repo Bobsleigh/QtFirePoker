@@ -56,13 +56,36 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     tabWidget->addTab(tab1, "Stats");
 
     //Tab2 (In Construction)
-    /*
+
+
+    QLineEdit* cardRankInput = new QLineEdit();
     QPushButton* testButton = new QPushButton("In construction");
     QHBoxLayout* layoutTab2 = new QHBoxLayout;
-    layoutTab2->addWidget(testButton);
+
+    //Left part
+    QGridLayout* layoutRankButtons = new QGridLayout;
+    layoutRankButtons->addWidget(cardRankInput);
+    QWidget* widgetRankButtons = new QWidget;
+    widgetRankButtons->setLayout(layoutRankButtons);
+
+    QSizePolicy spLeft(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spLeft.setHorizontalStretch(1);
+    widgetRankButtons->setSizePolicy(spLeft);
+
+    //Right part
+    QGridLayout* layoutStatsLabels = new QGridLayout;
+    layoutStatsLabels->addWidget(testButton);
+    QWidget* widgetStatsLabels = new QWidget;
+    widgetStatsLabels->setLayout(layoutStatsLabels);
+
+    QSizePolicy spRight(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spRight.setHorizontalStretch(1);
+    widgetStatsLabels->setSizePolicy(spRight);
+
+    layoutTab2->addWidget(widgetRankButtons);
+    layoutTab2->addWidget(widgetStatsLabels);
     tab2->setLayout(layoutTab2);
     tabWidget->addTab(tab2, "In construction");
-    */
 
     QObject::connect(m_loadButton, SIGNAL(clicked()), this, SLOT(loadButtonClicked()));
 
