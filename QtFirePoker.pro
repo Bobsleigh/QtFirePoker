@@ -11,7 +11,9 @@ SOURCES += \
     Parsing/HoleCards.cpp \
     Parsing/Player.cpp \
     Parsing/PokerTextFile.cpp \
-    Parsing/StatsCounter.cpp
+    Parsing/StatsCounter.cpp \
+    GUI/TabGraph.cpp \
+    GUI/TabHoleCardsRank.cpp
 
 HEADERS += \
     GUI/MainWindow.h \
@@ -21,4 +23,6 @@ HEADERS += \
     Parsing/HoleCards.h \
     Parsing/Player.h \
     Parsing/PokerTextFile.h \
-    Parsing/StatsCounter.h
+    Parsing/StatsCounter.h \
+    GUI/TabGraph.h \
+    GUI/TabHoleCardsRank.h
