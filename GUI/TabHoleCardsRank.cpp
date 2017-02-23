@@ -66,7 +66,6 @@ void TabHoleCardsRank::cardRankEntered()
     int firstCardRank = Card::cardLetterToNumber(m_cardRankInput->text().left(1).toStdString());
     int secondCardRank = Card::cardLetterToNumber(m_cardRankInput->text().mid(1,1).toStdString());
     int suited = Card::cardSuitToNumber(m_cardRankInput->text().right(1).toStdString());
-    qDebug() << QString("ALLO");
 
     if (firstCardRank == secondCardRank)
     {
