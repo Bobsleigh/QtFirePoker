@@ -1,4 +1,4 @@
-#include "Card.h"
+#include "Parsing/Card.h"
 #include <iostream>
 
 Card::Card() : m_value(0), m_color("Heart")

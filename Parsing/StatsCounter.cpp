@@ -1,6 +1,7 @@
-#include "StatsCounter.h"
+#include "Parsing/StatsCounter.h"
+#include "Parsing/PokerTextFile.h"
 
-StatsCounter::StatsCounter()
+StatsCounter::StatsCounter() : m_showdowns(0), m_wins(0), m_foldPreflop(0), m_foldFlop(0), m_foldTurn(0), m_foldRiver(0), m_total(0)
 {
 
 }
@@ -18,6 +19,10 @@ int StatsCounter::wins() const
 int StatsCounter::foldPreflop() const
 {
     return m_foldPreflop;
+}
+int StatsCounter::foldFlop() const
+{
+    return m_foldFlop;
 }
 int StatsCounter::foldTurn() const
 {
@@ -46,6 +51,11 @@ void StatsCounter::incrFoldPreflop()
     m_foldPreflop++;
     updateTotal();
 }
+void StatsCounter::incrFoldFlop()
+{
+    m_foldFlop++;
+    updateTotal();
+}
 void StatsCounter::incrFoldTurn()
 {
     m_foldTurn++;
@@ -56,15 +66,38 @@ void StatsCounter::incrFoldRiver()
     m_foldRiver++;
     updateTotal();
 }
+
+void StatsCounter::incrFold(Street currentStreet)
+{
+    if (currentStreet == Street::PREFLOP)
+    {
+        incrFoldPreflop();
+    }
+    else if (currentStreet == Street::FLOP)
+    {
+        incrFoldFlop();
+    }
+    else if (currentStreet == Street::TURN)
+    {
+        incrFoldTurn();
+    }
+    else if (currentStreet == Street::RIVER)
+    {
+        incrFoldRiver();
+    }
+
+}
 void StatsCounter::reset()
 {
     m_showdowns = 0;
     m_foldPreflop = 0;
+    m_foldFlop = 0;
     m_foldTurn = 0;
     m_foldRiver = 0;
+    m_total = 0;
 }
 void StatsCounter::updateTotal()
 {
-    m_total = m_showdowns + m_foldPreflop + m_foldTurn + m_foldRiver;
+    m_total = m_showdowns + m_foldPreflop + m_foldFlop + m_foldTurn + m_foldRiver;
 }
 

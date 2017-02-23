@@ -7,9 +7,9 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
-#include "PokerTextFile.h"
-#include "Player.h"
-#include "qcustomplot.h"
+#include "Parsing/PokerTextFile.h"
+#include "Parsing/Player.h"
+#include "GUI/qcustomplot.h"
 
 class MainWindow : public QMainWindow
 {
@@ -38,8 +38,14 @@ class MainWindow : public QMainWindow
 
     //Card rank stats section
     QLabel* m_lbWinRate;
+    QLabel* m_lbShowdown;
+    QLabel* m_lbFoldPreFlop;
+    QLabel* m_lbFoldFlop;
+    QLabel* m_lbFoldTurn;
+    QLabel* m_lbFoldRiver;
 
     void displaySessionPlot();
+
 };
 
 #endif // MAINWINDOW_H

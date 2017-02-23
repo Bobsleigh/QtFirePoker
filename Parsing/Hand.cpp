@@ -1,5 +1,5 @@
-#include "Hand.h"
-#include "Card.h"
+#include "Parsing/Hand.h"
+#include "Parsing/Card.h"
 #include <iostream>
 
 Hand::Hand() : m_handNumber(0), m_tournamentNumber(0), m_level(0), m_gain(0), m_loss(0)

@@ -1,8 +1,8 @@
-#include "MainWindow.h"
-#include "StatsCounter.h"
+#include "GUI/MainWindow.h"
+#include "Parsing/StatsCounter.h"
 
 
-MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0), m_lbAvgGain(0), m_cardRankInput(0), m_lbWinRate(0)
+MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0), m_lbTournamentNb(0), m_lbNbOfHands(0), m_lbNetGain(0), m_lbAvgGain(0), m_cardRankInput(0), m_lbWinRate(0), m_lbShowdown(0), m_lbFoldPreFlop(0), m_lbFoldFlop(0), m_lbFoldTurn(0), m_lbFoldRiver(0)
 {
 
     m_fileName = "";
@@ -60,12 +60,18 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
 
 
     m_cardRankInput = new QLineEdit();
+    m_cardRankInput->setMaxLength(3);
 
     QHBoxLayout* layoutTab2 = new QHBoxLayout;
 
     //Left part
+    QLabel* lbInputBox = new QLabel("Hole Cards Ranking:");
+    QLabel* lbInputInfo = new QLabel("Type a hole cards rank in the box above to display related stats. A hole cards rank must be in the standard format of [HigherCard][LowerCard][OffsuitOrSuited]. Use 'o' or 's' for the suit character. Ten, Jack, Queen King and Ace must be written as a letter. Pokets must exclude the suit character. Valid examples: A2s, T4o, AA, QJs, 97o, 22");
+    lbInputInfo->setWordWrap(true);
     QGridLayout* layoutRankButtons = new QGridLayout;
-    layoutRankButtons->addWidget(m_cardRankInput);
+    layoutRankButtons->addWidget(lbInputInfo, 1, 0, 1, 2);
+    layoutRankButtons->addWidget(lbInputBox, 0, 0);
+    layoutRankButtons->addWidget(m_cardRankInput, 0, 1);
     QWidget* widgetRankButtons = new QWidget;
     widgetRankButtons->setLayout(layoutRankButtons);
 
@@ -74,11 +80,20 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     widgetRankButtons->setSizePolicy(spLeft);
 
     //Right part
-    m_lbWinRate = new QLabel("WinRateHere");
-    QPushButton* testButton = new QPushButton("In construction");
+    m_lbWinRate = new QLabel("% win:");
+    m_lbFoldPreFlop = new QLabel("% fold preflop:");
+    m_lbFoldFlop = new QLabel("% fold flop:");
+    m_lbFoldTurn = new QLabel("% fold turn:");
+    m_lbFoldRiver = new QLabel("% fold river:");
+    m_lbShowdown = new QLabel("% to showdown:");
+
     QGridLayout* layoutStatsLabels = new QGridLayout;
-    layoutStatsLabels->addWidget(testButton);
     layoutStatsLabels->addWidget(m_lbWinRate);
+    layoutStatsLabels->addWidget(m_lbFoldPreFlop);
+    layoutStatsLabels->addWidget(m_lbFoldFlop);
+    layoutStatsLabels->addWidget(m_lbFoldTurn);
+    layoutStatsLabels->addWidget(m_lbFoldRiver);
+    layoutStatsLabels->addWidget(m_lbShowdown);
 
     QWidget* widgetStatsLabels = new QWidget;
     widgetStatsLabels->setLayout(layoutStatsLabels);
@@ -104,7 +119,6 @@ MainWindow::MainWindow() : m_activePlayer(0), m_loadButton(0), m_sessionPlot(0),
     QObject::connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     QObject::connect(loadAction, SIGNAL(triggered()), this, SLOT(loadButtonClicked()));
     QObject::connect(m_cardRankInput, SIGNAL(returnPressed()), this, SLOT(cardRankEntered()));
-
 }
 
 MainWindow::~MainWindow()
@@ -157,7 +171,33 @@ void MainWindow::cardRankEntered()
     int secondCardRank = Card::cardLetterToNumber(m_cardRankInput->text().mid(1,1).toStdString());
     int suited = Card::cardSuitToNumber(m_cardRankInput->text().right(1).toStdString());
 
-    m_lbWinRate->setText(QString::number(m_pokerTextFile.nbOfHoleCardsPerRank(firstCardRank, secondCardRank, suited).wins()));
+    if (firstCardRank == secondCardRank)
+    {
+        suited = 0;
+    }
+    else if (firstCardRank < secondCardRank)
+    {
+        int temp = firstCardRank;
+        firstCardRank = secondCardRank;
+        secondCardRank = temp;
+    }
+
+    if (firstCardRank == -1 || secondCardRank == -1 || suited == -1)
+    {
+        QMessageBox::critical(this, "Erreur", "Utilisez un format valide (exemples: KQs, A2o, T8s, JJ)");
+        m_cardRankInput->clear();
+    }
+    else
+    {
+        StatsCounter stats = m_pokerTextFile.nbOfHoleCardsPerRank(firstCardRank, secondCardRank, suited);
+
+        m_lbWinRate->setText("% win: " + QString::number(stats.wins()));
+        m_lbFoldPreFlop->setText("% fold preflop: " + QString::number(stats.foldPreflop()));
+        m_lbFoldFlop->setText("% fold flop: " + QString::number(stats.foldFlop()));
+        m_lbFoldTurn->setText("% fold turn: " + QString::number(stats.foldTurn()));
+        m_lbFoldRiver->setText("% fold river: " + QString::number(stats.foldRiver()));
+        m_lbShowdown->setText("% to showdown: " + QString::number(stats.showdowns()));
+    }
 }
 
 

@@ -1,5 +1,5 @@
-#include "PokerTextFile.h"
-#include "Hand.h"
+#include "Parsing/PokerTextFile.h"
+#include "Parsing/Hand.h"
 #include <fstream>
 #include <QMessageBox>
 #include <QDebug>
@@ -7,6 +7,16 @@
 #include <istream>
 
 PokerTextFile::PokerTextFile() : m_name("")
+{
+    nbOfHoleCardsPerRankReset();
+}
+
+std::vector<Hand> PokerTextFile::getFileHands()
+{
+    return m_hands;
+}
+
+void PokerTextFile::nbOfHoleCardsPerRankReset()
 {
     for (int i=0;i<14;i++)
     {
@@ -18,12 +28,6 @@ PokerTextFile::PokerTextFile() : m_name("")
             }
         }
     }
-
-}
-
-std::vector<Hand> PokerTextFile::getFileHands()
-{
-    return m_hands;
 }
 
 
@@ -31,6 +35,7 @@ bool PokerTextFile::load(std::string fileName, Player* activePlayer)
 {
     m_name = fileName;
     m_hands.clear();
+    nbOfHoleCardsPerRankReset();
 
     std::ifstream txtFile(fileName);
 
@@ -96,10 +101,11 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
     readHoleCardsLine(textLine, &currentHand);
 
     //STEP 4 - READ BETS
+    Street currentStreet = Street::PREFLOP;
     while(true)
     {
         getline(*txtFile, textLine);
-        int value = readBetLine(textLine, activePlayer, &currentHand);
+        int value = readBetLine(textLine, activePlayer, &currentHand, &currentStreet);
 
         if (value == 0)
         {
@@ -118,7 +124,6 @@ Hand PokerTextFile::readSingleHand(std::ifstream* txtFile, Player* activePlayer)
             currentHand.setGain(currentHand.gain() + value);
         }
     }
-
     return currentHand;
 }
 
@@ -132,7 +137,7 @@ void PokerTextFile::readHandStartingLine(std::string textLine, Hand* currentHand
     std::string month = "";
     std::string day = "";
 
-    bool skipBuyin = false;
+    //bool skipBuyin = false;  TODO: Implement skipBuyin for cash game cases
     size_t startPos = 0;
     size_t endPos = 0;
 
@@ -176,8 +181,9 @@ int PokerTextFile::readHandSeatLine(std::string textLine, Player* activePlayer, 
         stack = getNextNumber(textLine, &startPos, &endPos, " ");
         return std::stoi(stack);
     }
+    int a = currentHand->gain(); //TODO: implement player seat position recording in currentHand
 
-    return 0;
+    return a*0;
 }
 
 bool PokerTextFile::readBlindLine(std::string textLine, Player* activePlayer, Hand* currentHand)
@@ -217,7 +223,7 @@ void PokerTextFile::setHoleCardsRank(Hand* currentHand)
     }
 }
 
-int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer, Hand* currentHand)
+int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer, Hand* currentHand, Street* currentStreet)
 {
     size_t startPos = textLine.find_first_of(":");
     size_t endPos = startPos;
@@ -240,6 +246,7 @@ int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer, Hand*
         }
         else if (textLine.find("folds") != textLine.npos)
         {
+            m_nbOfHoleCardsPerRank[currentHand->holeCards().higherValue()][currentHand->holeCards().lowerValue()][currentHand->holeCards().isSuited()].incrFold(*currentStreet); //Count a win for this card rank
             return -1; //TODO: Find another special value to return
         }
         else if (textLine.find("collected") != textLine.npos)
@@ -268,14 +275,29 @@ int PokerTextFile::readBetLine(std::string textLine, Player* activePlayer, Hand*
             return 0;
         }
     }
+    else if (textLine.find("*** FLOP ***") != textLine.npos)
+    {
+        *currentStreet = Street::FLOP;
+    }
+    else if (textLine.find("*** TURN ***") != textLine.npos)
+    {
+        *currentStreet = Street::TURN;
+    }
+    else if (textLine.find("*** RIVER ***") != textLine.npos)
+    {
+        *currentStreet = Street::RIVER;
+    }
+    else if (textLine.find("*** SHOW DOWN ***") != textLine.npos)
+    {
+        *currentStreet = Street::SHOWDOWN;
+    }
     else if (textLine.find("SUMMARY") != textLine.npos)
     {
         return -1; //TODO: Change this special value at the same time than folds
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
+
 }
 
 bool PokerTextFile::seekNextHand(std::ifstream* txtFile)

@@ -1,7 +1,7 @@
 #ifndef HOLECARDS_H
 #define HOLECARDS_H
 
-#include "Card.h"
+#include "Parsing/Card.h"
 
 
 class HoleCards
