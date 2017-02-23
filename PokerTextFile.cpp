@@ -308,3 +308,7 @@ std::string PokerTextFile::getNextNumber(std::string textLine, size_t* startPos,
     return textLine.substr(*startPos, *endPos - *startPos);
 }
 
+StatsCounter PokerTextFile::nbOfHoleCardsPerRank(int firstCardRank, int secondCardRank, int suited)
+{
+    return m_nbOfHoleCardsPerRank[firstCardRank][secondCardRank][suited];
+}

@@ -38,6 +38,7 @@ int Card::cardLetterToNumber(std::string stringNumber)
     return -1;
 }
 
+
 std::string Card::cardNumberToLetter(int number)
 {
     std::string value;
@@ -62,6 +63,14 @@ std::string Card::cardNumberToLetter(int number)
 int Card::cardLetterToNumber(int number)
 {
     return number;
+}
+
+int Card::cardSuitToNumber(std::string stringNumber)
+{
+    if (stringNumber == "o") return 0;
+    else if (stringNumber == "s") return 1;
+
+    return -1;
 }
 
 void Card::setValue(int value)

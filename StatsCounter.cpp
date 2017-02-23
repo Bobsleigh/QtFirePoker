@@ -10,6 +10,11 @@ int StatsCounter::showdowns() const
     return m_showdowns;
 }
 
+int StatsCounter::wins() const
+{
+    return m_wins;
+}
+
 int StatsCounter::foldPreflop() const
 {
     return m_foldPreflop;
