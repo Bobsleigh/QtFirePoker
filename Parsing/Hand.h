@@ -2,7 +2,7 @@
 #define HAND_H
 
 #include "Card.h"
-#include "HoleCards.h"
+#include "Parsing/HoleCards.h"
 
 
 class Hand

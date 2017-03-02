@@ -3,14 +3,15 @@
 
 #include "Hand.h"
 #include <vector>
-#include "player.h"
-#include "StatsCounter.h"
-
+#include "Parsing/player.h"
+#include "Parsing/StatsCounter.h"
 
 class PokerTextFile
 {
     public:
     PokerTextFile();
+
+    void nbOfHoleCardsPerRankReset();
     bool load(std::string fileName, Player* activePlayer);
     Hand readSingleHand(std::ifstream* txtFile, Player* activePlayer);
     std::vector<Hand> getFileHands();
@@ -19,7 +20,7 @@ class PokerTextFile
     int readHandSeatLine(std::string textLine, Player* activePlayer, Hand* currentHand);
     bool readBlindLine(std::string textLine, Player* activePlayer, Hand* currentHand);
     void readHoleCardsLine(std::string textLine, Hand* currentHand);
-    int readBetLine(std::string textLine, Player* activePlayer, Hand* currentHand);
+    int readBetLine(std::string textLine, Player* activePlayer, Hand* currentHand, Street* currentStreet);
     std::string getNextNumber(std::string textLine, size_t* startPos, size_t* endPos, std::string cutOffChar);
     bool seekNextHand(std::ifstream* txtFile);
     void setHoleCardsRank(Hand* currentHand);
@@ -34,6 +35,9 @@ class PokerTextFile
     //The third dimension is 0 = offsuit, 1 = suited
     StatsCounter m_nbOfHoleCardsPerRank[14][14][2]; //Note: for clarity, 0 indices are left empty and have no meaning.
 
+
 };
+
+
 
 #endif // POKERTEXTFILE_H

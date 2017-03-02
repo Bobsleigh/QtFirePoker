@@ -7,9 +7,11 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
-#include "PokerTextFile.h"
-#include "Player.h"
-#include "qcustomplot.h"
+#include "Parsing/PokerTextFile.h"
+#include "Parsing/Player.h"
+#include "GUI/qcustomplot.h"
+#include "TabGraph.h"
+#include "TabHoleCardsRank.h"
 
 class MainWindow : public QMainWindow
 {
@@ -21,25 +23,28 @@ class MainWindow : public QMainWindow
 
     public slots:
     void loadButtonClicked();
-    void cardRankEntered();
 
     private:
-    QPushButton *m_loadButton;
+    QPushButton* m_loadButton;
     QString m_fileName;
     PokerTextFile m_pokerTextFile;
     Player* m_activePlayer;
-    QCustomPlot* m_sessionPlot;
 
-    QLabel* m_lbTournamentNb;
-    QLabel* m_lbNbOfHands;
-    QLabel* m_lbNetGain;
-    QLabel* m_lbAvgGain;
-    QLineEdit* m_cardRankInput;
+    TabGraph* m_tab1;
+    TabHoleCardsRank* m_tab2;
 
     //Card rank stats section
+    QLineEdit* m_cardRankInput;
+    QLabel* m_lbTotal;
     QLabel* m_lbWinRate;
+    QLabel* m_lbShowdown;
+    QLabel* m_lbFoldPreFlop;
+    QLabel* m_lbFoldFlop;
+    QLabel* m_lbFoldTurn;
+    QLabel* m_lbFoldRiver;
 
     void displaySessionPlot();
+
 };
 
 #endif // MAINWINDOW_H

@@ -1,6 +1,6 @@
-#include "Player.h"
+#include "Parsing/Player.h"
 
-Player::Player(std::string name, long chips) : m_name(name), m_chips(chips)
+Player::Player(std::string name, long chips) : m_chips(chips), m_name(name)
 {
 
 }
